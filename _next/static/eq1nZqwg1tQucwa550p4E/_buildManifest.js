@@ -1,7 +1,12 @@
 self.__BUILD_MANIFEST = {
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/pusula-ai-web//_next/:path+",
+        "destination": "/pusula-ai-web/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
