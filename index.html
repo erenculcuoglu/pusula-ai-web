@@ -5,28 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pusula AI - Öğretmen Asistanı</title>
-
-    <meta name="description" content="Öğretmenler için profesyonel not takip sistemi.">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Yapay zeka destekli öğretmen asistanı">
+    <meta name="theme-color" content="#6366f1">
 
     <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
-                        ai: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9' }
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
@@ -34,23 +28,8 @@
 
     <style>
         body {
-            background-color: #f8fafc;
             font-family: 'Inter', sans-serif;
-        }
-
-        .sticky-col-header {
-            position: sticky;
-            left: 0;
-            z-index: 20;
             background-color: #f8fafc;
-        }
-
-        .sticky-col-cell {
-            position: sticky;
-            left: 0;
-            z-index: 10;
-            background-color: #ffffff;
-            border-right: 1px solid #e2e8f0;
         }
 
         .custom-scroll::-webkit-scrollbar {
@@ -65,11 +44,6 @@
         .custom-scroll::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 3px;
-        }
-
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
         }
 
         .cell-input {
@@ -87,31 +61,6 @@
             border-radius: 4px;
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.15s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .text-gradient-ai {
-            background: linear-gradient(to right, #7c3aed, #db2777);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .shadow-premium-blue {
-            box-shadow: 0 10px 40px -10px rgba(37, 99, 235, 0.4);
-        }
-
         @keyframes pulse-glow {
 
             0%,
@@ -127,16 +76,28 @@
         .animate-pulse-glow {
             animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+
+        .shadow-premium-blue {
+            box-shadow: 0 10px 40px -10px rgba(37, 99, 235, 0.4);
+        }
+
+        .text-gradient-violet {
+            background: linear-gradient(to right, #7c3aed, #db2777);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 
 <body class="text-slate-800 h-screen flex flex-col overflow-hidden">
 
     <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200 h-16 flex-none z-30 shadow-sm relative">
-        <div class="h-full px-4 sm:px-6 flex items-center justify-between">
-            <div class="flex items-center gap-3 relative">
-                <!-- Pusula AI Logo: Compass SVG with AI Sparkle -->
+    <header class="bg-white border-b border-slate-200 h-16 flex-none z-50 shadow-sm relative text-slate-600">
+        <div class="h-full px-4 sm:px-6 flex items-center gap-4">
+            <!-- LEFT: Logo + Class Selector -->
+            <div class="flex items-center gap-3 relative flex-shrink-0">
+                <!-- Pusula AI Logo -->
                 <div
                     class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-full flex items-center justify-center text-white shadow-sm flex-shrink-0 relative">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,163 +108,274 @@
                     <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-yellow-300 rounded-full animate-pulse-glow">
                     </div>
                 </div>
+
                 <div class="hidden lg:block">
                     <h1 class="text-base font-black text-slate-800 tracking-tight">Pusula AI</h1>
                 </div>
+
                 <div class="h-8 w-px bg-slate-100 mx-1 hidden lg:block"></div>
-                <!-- Class Dropdown -->
-                <button id="classDropdownTrigger" data-dropdown-trigger="classDropdown"
-                    onclick="app.toggleDropdown(event, 'classDropdown')"
-                    class="flex flex-col items-start text-left hover:bg-slate-50 rounded px-2 py-1 transition-colors group">
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-sm font-bold text-slate-800 truncate leading-tight max-w-[150px] sm:max-w-xs"
-                            id="headerClassName">Yükleniyor...</h1>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-brand-600"></i>
-                    </div>
-                    <span class="text-[10px] text-slate-400 font-medium">Sınıf Değiştir / Ekle</span>
-                </button>
-                <div id="classDropdown"
-                    class="dropdown-menu absolute top-12 left-0 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 hidden animate-fade-in origin-top-left">
-                    <div class="p-2 border-b border-slate-100 bg-slate-50 rounded-t-xl">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">Sınıflarım</span>
-                    </div>
-                    <div id="classListContainer" class="max-h-60 overflow-y-auto custom-scroll p-1"></div>
-                    <div class="p-2 border-t border-slate-100 bg-slate-50 rounded-b-xl">
-                        <button onclick="app.openModal('classModal', 'create'); app.closeAllDropdowns()"
-                            class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-dashed border-brand-300 text-brand-600 rounded-lg text-xs font-bold hover:bg-brand-50 transition-colors">
-                            <i class="fa-solid fa-plus"></i> Yeni Sınıf Oluştur
-                        </button>
+
+                <!-- Class Selector -->
+                <div class="relative">
+                    <button id="classBtn" onclick="app.toggleClassMenu()"
+                        class="flex flex-col items-start text-left hover:bg-slate-50 rounded px-2 py-1 transition-colors group">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="text-sm font-bold text-slate-800 truncate leading-tight max-w-[150px] sm:max-w-xs"
+                                id="activeClassName">Yükleniyor...</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-transform"
+                                id="classChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] text-slate-400 font-medium whitespace-nowrap">Sınıf Seçin</span>
+                    </button>
+
+                    <div id="classMenu"
+                        class="hidden absolute top-12 left-0 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1 overflow-hidden">
+                        <div class="p-2 border-b border-slate-100 bg-slate-50">
+                            <span
+                                class="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">Sınıflarım</span>
+                        </div>
+                        <div id="classList" class="max-h-60 overflow-y-auto py-1 custom-scroll"></div>
+                        <div class="p-2 border-t border-slate-100 bg-slate-50">
+                            <button onclick="app.openModal('classModal', 'create')"
+                                class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-dashed border-blue-300 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Yeni Sınıf Oluştur
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Delete Class Button -->
+                <button id="deleteClassBtn" onclick="app.confirmDeleteClass()"
+                    class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Sınıfı Sil">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                        </path>
+                    </svg>
+                </button>
             </div>
 
-            <div class="hidden md:flex flex-1 max-w-sm mx-6">
-                <div class="relative w-full">
-                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" placeholder="Öğrenci ara..."
-                        class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all"
+            <!-- CENTER: Search -->
+            <div class="hidden md:flex flex-1 justify-center">
+                <div class="relative w-full max-w-md">
+                    <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Öğrenci ara..."
+                        class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
                         oninput="app.handleSearch(this.value)">
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <div id="saveStatus" class="hidden xl:flex flex-col items-end mr-2">
-                    <span class="text-xs font-bold text-slate-700">Hazır</span>
-                    <span class="text-[10px] text-slate-400" id="lastSavedTime">Otomatik Kayıt</span>
+            <!-- RIGHT: Actions -->
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <!-- Auto-Save Indicator -->
+                <div
+                    class="hidden xl:flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-50 border border-slate-200">
+                    <span class="text-[10px] font-bold uppercase text-slate-400" id="saveStatus">Güncel</span>
                 </div>
-                <button onclick="app.analyzeClass(event)"
+
+                <!-- Dersler Button -->
+                <button id="subjectsBtn" onclick="app.openModal('classModal', 'edit')"
+                    class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 rounded-lg text-sm font-bold transition-all shadow-sm group">
+                    <svg class="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                    <span class="hidden lg:inline">Dersler</span>
+                </button>
+
+                <!-- Analiz Button -->
+                <button onclick="app.analyzeClass()"
                     class="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-violet-50 to-fuchsia-50 text-violet-700 border border-violet-100 hover:from-violet-100 hover:to-fuchsia-100 rounded-lg text-sm font-bold transition-all shadow-sm group">
-                    <i class="fa-solid fa-wand-magic-sparkles group-hover:animate-pulse"></i>
-                    <span class="hidden lg:inline text-gradient-ai">Analiz</span>
+                    <svg class="w-4 h-4 group-hover:animate-pulse" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                        </path>
+                    </svg>
+                    <span class="hidden lg:inline text-gradient-violet">Analiz</span>
                 </button>
-                <button onclick="app.saveData()" id="saveBtn"
-                    class="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-400 rounded-lg text-sm font-bold transition-all disabled:cursor-not-allowed"
-                    disabled>
-                    <i class="fa-regular fa-floppy-disk"></i> <span class="hidden sm:inline">Kaydet</span>
+
+                <!-- Settings -->
+                <button onclick="app.toggleSettingsMenu()"
+                    class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
                 </button>
-                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
-                <button id="importBtn" onclick="app.openImportWizard()"
-                    class="p-2 text-slate-600 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors relative"
-                    title="Excel İşlemleri"><i class="fa-solid fa-file-excel text-lg"></i></button>
-                <button data-dropdown-trigger="settingsDropdown" onclick="app.toggleDropdown(event, 'settingsDropdown')"
-                    class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"><i
-                        class="fa-solid fa-gear text-lg"></i></button>
-                <!-- Settings Dropdown -->
-                <div id="settingsDropdown"
-                    class="dropdown-menu absolute top-14 right-4 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 hidden animate-fade-in">
-                    <div class="p-1">
-                        <button onclick="app.openModal('classModal', 'edit'); app.closeAllDropdowns()"
-                            class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg"><i
-                                class="fa-solid fa-pen-to-square mr-2 text-slate-400"></i> Sınıfı Düzenle</button>
-                        <button id="exportBtn" onclick="app.exportClassXLSX(); app.closeAllDropdowns()"
-                            class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg"><i
-                                class="fa-solid fa-download mr-2 text-green-500"></i> Excel Olarak İndir</button>
-                        <div class="h-px bg-slate-100 my-1"></div>
-                        <button onclick="app.deleteClass(); app.closeAllDropdowns()"
-                            class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg"><i
-                                class="fa-solid fa-trash-can mr-2"></i> Sınıfı Sil</button>
-                    </div>
+
+                <div id="settingsMenu"
+                    class="hidden absolute top-14 right-4 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1">
+                    <button onclick="app.openModal('classModal', 'edit')"
+                        class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                            </path>
+                        </svg>
+                        Sınıfı Düzenle
+                    </button>
+                    <button onclick="app.importExcel()"
+                        class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Excel ile içeri aktar
+                    </button>
+                    <button onclick="app.exportExcel()"
+                        class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Excel ile dışarı aktar
+                    </button>
+                    <div class="h-px bg-slate-100 my-1"></div>
+                    <button onclick="app.confirmDeleteClass()"
+                        class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                        </svg>
+                        Sınıfı Sil
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- CONTENT -->
+    <!-- MAIN CONTENT -->
     <main class="flex-1 overflow-hidden relative flex flex-col bg-slate-50/50">
+        <!-- Dashboard Cards -->
         <div class="px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 flex-none">
-            <!-- Dashboard Cards -->
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i
-                        class="fa-solid fa-users text-lg"></i></div>
+                <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
+                    </svg>
+                </div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase">Öğrenci</p>
-                    <h3 class="text-xl font-bold text-slate-800" id="dashStudentCount">-</h3>
+                    <h3 class="text-xl font-bold text-slate-800" id="statStudents">0</h3>
                 </div>
             </div>
+
             <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center"><i
-                        class="fa-solid fa-book text-lg"></i></div>
+                <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                </div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase">Ders Sayısı</p>
-                    <h3 class="text-xl font-bold text-slate-800" id="dashSubjectCount">-</h3>
+                    <h3 class="text-xl font-bold text-slate-800" id="statSubjects">0</h3>
                 </div>
             </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center"><i
-                        class="fa-solid fa-chart-pie text-lg"></i></div>
-                <div>
-                    <p class="text-xs text-slate-400 font-bold uppercase">Sınıf Ort.</p>
-                    <h3 class="text-xl font-bold text-slate-800" id="dashAverage">-</h3>
+
+            <div
+                class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 col-span-2 md:col-span-2">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
-            </div>
-            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i
-                        class="fa-solid fa-check-circle text-lg"></i></div>
                 <div>
                     <p class="text-xs text-slate-400 font-bold uppercase">Veri Durumu</p>
-                    <h3 class="text-xl font-bold text-slate-800" id="dashStatus">-</h3>
+                    <h3 class="text-xl font-bold text-emerald-600" id="statStatus">Tamamlandı</h3>
                 </div>
             </div>
         </div>
 
+        <!-- Table Section -->
         <div class="px-6 pb-2 flex items-center justify-between flex-none">
             <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Öğrenci Listesi</h2>
-            <button id="btnAddStudent" onclick="app.addStudent()"
-                class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-brand-600 hover:border-brand-200 rounded-lg text-sm font-medium transition-colors shadow-sm">
-                <i class="fa-solid fa-plus"></i> Öğrenci Ekle
+            <button onclick="app.addStudent()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Öğrenci Ekle
             </button>
         </div>
 
-        <div
-            class="flex-1 overflow-auto bg-white border-t border-slate-200 relative mx-6 mb-6 rounded-xl shadow-sm custom-scroll">
-            <table class="w-full text-left text-sm border-collapse min-w-[800px]">
+        <!-- Table Container -->
+        <div class="flex-1 overflow-auto bg-white border-t border-slate-200 relative mx-6 mb-6 rounded-xl shadow-sm custom-scroll"
+            id="tableContainer">
+            <table class="w-full text-left text-sm border-collapse min-w-[800px]" id="mainTable">
                 <thead class="bg-slate-50 text-slate-500 font-semibold sticky top-0 z-30">
-                    <tr>
+                    <tr id="tableHeader">
                         <th class="w-10 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 sticky left-0 z-40">
                             <input type="checkbox" id="selectAll" onchange="app.toggleSelectAll(this)"
-                                class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
+                                class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                         </th>
-                        <th class="px-4 py-3 border-b border-slate-200 bg-slate-50 sticky-col-header z-40 min-w-[200px] cursor-pointer hover:text-brand-600"
-                            onclick="app.sortData('name')">
-                            Öğrenci Adı <i class="fa-solid fa-sort text-xs ml-1 opacity-50"></i>
+                        <th
+                            class="w-10 px-2 py-3 text-center border-b border-slate-200 bg-slate-50 sticky left-10 z-40 font-bold text-slate-400 text-xs">
+                            #</th>
+                        <th class="px-4 py-3 border-b border-slate-200 bg-slate-50 sticky left-20 z-40 min-w-[200px] cursor-pointer hover:text-blue-600 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]"
+                            onclick="app.sortBy('name')">
+                            <div class="flex items-center gap-2">
+                                Öğrenci Adı
+                                <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                </svg>
+                            </div>
                         </th>
-                        <!-- Headers will be injected here -->
-                        <th id="headerAnchor" class="hidden"></th>
-                        <th class="w-24 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 cursor-pointer"
-                            onclick="app.sortData('total')">Toplam</th>
-                        <th class="w-24 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 cursor-pointer"
-                            onclick="app.sortData('average')">Ort.</th>
+                        <!-- Subject columns will be injected here -->
+                        <th class="w-24 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 cursor-pointer hover:text-blue-600"
+                            onclick="app.sortBy('total')">
+                            <div class="flex items-center justify-center gap-2">
+                                Toplam
+                                <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                </svg>
+                            </div>
+                        </th>
                         <th class="w-24 px-4 py-3 border-b border-slate-200 bg-slate-50 text-center">İşlem</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
             </table>
 
+            <!-- Empty State -->
             <div id="emptyState"
                 class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white z-10 p-6">
                 <div
                     class="w-20 h-20 bg-slate-50/50 rounded-full flex items-center justify-center mb-6 text-slate-300 ring-8 ring-slate-50/20">
-                    <i class="fa-regular fa-file-lines text-4xl" style="stroke-width: 1.5;"></i>
+                    <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
                 </div>
                 <h3 class="text-[22px] font-bold text-slate-800 text-center max-w-sm px-6 mb-3 tracking-tight">
                     Başlamak için öncelikle ders ekleyiniz.
@@ -312,544 +384,467 @@
                     Öğrenci eklemeden önce not girişi yapacağınız dersleri tanımlamanız gerekir.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="app.openModal('classModal', 'create')"
+                    <button onclick="app.openModal('classModal', 'edit')"
                         class="px-8 py-4 bg-[#2563EB] text-white rounded-2xl text-base font-bold hover:bg-blue-700 shadow-premium-blue flex items-center gap-3 transition-all hover:scale-[1.02] active:scale-95">
-                        <i class="fa-solid fa-book text-xl"></i> Ders Ekle
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            </path>
+                        </svg>
+                        Ders Ekle
                     </button>
                 </div>
             </div>
         </div>
-
-        <div id="bulkActionBar"
-            class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-6 z-50 transition-all duration-300 translate-y-32">
-            <span class="font-bold text-sm"><span id="selectedCount">0</span> seçildi</span>
-            <div class="h-4 w-px bg-slate-700"></div>
-            <div class="flex gap-2">
-                <button onclick="app.deleteSelected()"
-                    class="text-red-300 hover:text-white text-sm font-medium transition-colors">Sil</button>
-                <button onclick="app.exportSelected()"
-                    class="text-emerald-300 hover:text-white text-sm font-medium transition-colors ml-4">Excel
-                    İndir</button>
-                <button onclick="app.clearSelection()" class="text-slate-500 hover:text-white ml-4"><i
-                        class="fa-solid fa-xmark"></i></button>
-            </div>
-        </div>
     </main>
 
-    <!-- MODALS -->
-    <div id="aiModal" class="fixed inset-0 bg-black/50 z-[90] hidden items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="p-5 border-b border-ai-100 bg-ai-50 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-8 h-8 rounded-full bg-white border border-ai-200 flex items-center justify-center text-ai-600 shadow-sm">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-slate-800 text-gradient-ai">Yapay Zeka Analizi</h3>
-                        <p class="text-xs text-slate-500" id="aiModalSubtitle"></p>
-                    </div>
-                </div>
-                <button onclick="app.closeModal('aiModal')" class="text-slate-400 hover:text-slate-600"><i
-                        class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto custom-scroll">
-                <div id="aiLoadingState" class="flex flex-col items-center justify-center py-8">
-                    <div class="w-10 h-10 border-4 border-ai-200 border-t-ai-600 rounded-full animate-spin mb-4"></div>
-                    <p class="text-sm text-slate-600 font-medium">Analiz hazırlanıyor...</p>
-                </div>
-                <div id="aiContentState" class="hidden">
-                    <div id="aiResponseText" class="prose prose-sm max-w-none text-slate-700"></div>
-                </div>
-            </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="app.copyAIContent()"
-                    class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm"><i
-                        class="fa-regular fa-copy mr-2"></i> Kopyala</button>
-                <button onclick="app.closeModal('aiModal')"
-                    class="px-4 py-2 bg-ai-600 text-white hover:bg-ai-700 rounded-lg text-sm font-medium shadow-sm">Tamam</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="classModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] hidden items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+    <!-- CLASS MODAL -->
+    <div id="classModal"
+        class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="p-5 border-b border-slate-100 bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-800" id="classModalTitle"></h3>
+                <h3 class="font-bold text-lg text-slate-800" id="classModalTitle">Sınıf Düzenle</h3>
             </div>
             <div class="p-6 space-y-4">
-                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Sınıf Adı</label><input
-                        type="text" id="classInputName"
-                        class="w-full px-3 py-2 border border-slate-300 rounded-lg outline-none focus:border-brand-500">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Sınıf Adı</label>
+                    <input type="text" id="classNameInput"
+                        class="w-full px-3 py-2 border border-slate-300 rounded-lg outline-none focus:border-blue-500"
+                        placeholder="Örn: 9-A">
                 </div>
-                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-2">Dersler</label>
-                    <div id="classSubjectsList" class="space-y-2 max-h-40 overflow-y-auto custom-scroll pr-1"></div>
-                    <button onclick="app.addClassSubjectRow()"
-                        class="mt-2 text-xs text-brand-600 font-bold hover:underline">+ Ders Ekle</button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Dersler</label>
+                    <div id="subjectsList" class="space-y-2 max-h-40 overflow-y-auto custom-scroll pr-1"></div>
+                    <button onclick="app.addSubjectRow()" class="mt-2 text-xs text-blue-600 font-bold hover:underline">+
+                        Ders Ekle</button>
                 </div>
             </div>
             <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
                 <button onclick="app.closeModal('classModal')"
                     class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg text-sm font-medium">İptal</button>
-                <button onclick="app.saveClassModal()"
-                    class="px-4 py-2 bg-brand-600 text-white hover:bg-brand-700 rounded-lg text-sm font-medium shadow-sm">Kaydet</button>
+                <button onclick="app.saveClass()"
+                    class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium shadow-sm">Kaydet</button>
             </div>
         </div>
     </div>
 
-    <div id="importModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] hidden items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <div>
-                    <h3 class="font-bold text-lg text-slate-800">Excel ile Aktar</h3>
-                </div>
-                <button onclick="app.closeModal('importModal')" class="text-slate-400 hover:text-slate-600"><i
-                        class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto custom-scroll">
-                <div class="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-lg flex justify-between items-center">
-                    <div>
-                        <h4 class="text-sm font-bold text-blue-800">1. Şablonu İndir</h4>
-                        <p class="text-xs text-blue-600">Bu formatı kullanın.</p>
-                    </div>
-                    <button onclick="app.downloadTemplate()"
-                        class="px-3 py-1.5 bg-white border border-blue-200 text-blue-700 text-xs font-bold rounded shadow-sm hover:bg-blue-50">İndir
-                        .xlsx</button>
-                </div>
-                <div class="mb-4">
-                    <label
-                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6"><i
-                                class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 mb-2"></i>
-                            <p class="text-sm text-slate-500">Dosyayı buraya bırakın</p>
-                        </div>
-                        <input id="importFileInput" type="file" class="hidden" accept=".xlsx"
-                            onchange="app.handleImportFileSelect(event)" />
-                    </label>
-                </div>
-                <div id="importPreviewArea" class="hidden">
-                    <h4 class="text-sm font-bold text-slate-700 mb-2">Önizleme</h4>
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs">
-                        <p>Öğrenci: <span class="font-bold text-slate-800" id="previewStudentCount">0</span></p>
-                        <p class="mt-1">Eşleşen Dersler: <span class="font-bold text-slate-800"
-                                id="previewSubjectMatches">-</span></p>
-                        <div id="previewErrorBox"
-                            class="hidden mt-2 p-2 bg-red-100 text-red-700 rounded border border-red-200"><span
-                                id="previewErrorMsg"></span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="app.closeModal('importModal')"
-                    class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg text-sm font-medium">Kapat</button>
-                <button id="btnImportApply" onclick="app.applyImport()"
-                    class="px-4 py-2 bg-brand-600 text-white hover:bg-brand-700 rounded-lg text-sm font-medium shadow-sm opacity-50 cursor-not-allowed"
-                    disabled>Onayla</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="undoToast"
-        class="fixed bottom-6 right-6 bg-slate-800 text-white px-5 py-4 rounded-lg shadow-xl z-[90] flex items-center gap-4 transition-all duration-300 translate-y-40">
-        <div>
-            <p class="font-bold text-sm">İşlem Tamamlandı</p>
-            <p class="text-xs text-slate-400">Geri alabilirsiniz.</p>
-        </div>
-        <button onclick="app.undoLastAction()"
-            class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded uppercase tracking-wide transition-colors">Geri
-            Al</button>
-    </div>
-
-    <!-- SCRIPT -->
     <script>
-        const apiKey = "";
+        // Application State
+        const app = {
+            state: {
+                classes: [],
+                activeClassId: null,
+                searchQuery: '',
+                sortKey: 'name',
+                sortAsc: true,
+                selectedIds: new Set(),
+                modalMode: 'create'
+            },
 
-        class NotmatikApp {
-            constructor() {
-                // UI Binding
-                this.els = {
-                    tbody: document.getElementById('tableBody'),
-                    headerAnchor: document.getElementById('headerAnchor'),
-                    emptyState: document.getElementById('emptyState'),
-                    headerName: document.getElementById('headerClassName'),
-                    statTotal: document.getElementById('dashStudentCount'),
-                    statSubj: document.getElementById('dashSubjectCount'),
-                    statAvg: document.getElementById('dashAverage'),
-                    statStatus: document.getElementById('dashStatus'),
-                    saveBtn: document.getElementById('saveBtn'),
-                    bulkBar: document.getElementById('bulkActionBar'),
-                    selectedCount: document.getElementById('selectedCount'),
-                    undoToast: document.getElementById('undoToast'),
-                    dropdowns: ['classDropdown', 'settingsDropdown']
-                };
-
-                // State
-                this.state = {
-                    classes: [],
-                    activeClassId: null,
-                    ui: { search: "", sortKey: "name", sortAsc: true, selected: new Set(), isDirty: false, importData: null },
-                    trash: null
-                };
-
-                this.loadFromStorage();
-
+            init() {
+                this.loadData();
                 if (this.state.classes.length === 0) {
-                    this.createClass("Genel Sınıf", true);
-                } else if (!this.state.activeClassId) {
-                    this.state.activeClassId = this.state.classes[0].id;
+                    this.createClass('Genel Sınıf', []);
                 }
+                this.render();
 
+                // Close dropdowns on outside click
                 document.addEventListener('click', (e) => {
-                    const isDropdown = e.target.closest('.dropdown-menu');
-                    const isTrigger = e.target.closest('[data-dropdown-trigger]');
-                    if (!isDropdown && !isTrigger) {
-                        this.closeAllDropdowns();
+                    if (!e.target.closest('#classBtn') && !e.target.closest('#classMenu')) {
+                        document.getElementById('classMenu').classList.add('hidden');
+                    }
+                    if (!e.target.closest('button[onclick*="toggleSettingsMenu"]') && !e.target.closest('#settingsMenu')) {
+                        document.getElementById('settingsMenu').classList.add('hidden');
                     }
                 });
+            },
 
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') this.closeAllDropdowns();
-                });
+            loadData() {
+                const data = localStorage.getItem('pusula_ai_data');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    this.state.classes = parsed.classes || [];
+                    this.state.activeClassId = parsed.activeClassId || (this.state.classes[0]?.id);
+                }
+            },
 
+            saveData() {
+                localStorage.setItem('pusula_ai_data', JSON.stringify({
+                    classes: this.state.classes,
+                    activeClassId: this.state.activeClassId
+                }));
+                document.getElementById('saveStatus').textContent = 'Kaydedildi';
+                setTimeout(() => {
+                    document.getElementById('saveStatus').textContent = 'Güncel';
+                }, 2000);
+            },
+
+            getActiveClass() {
+                return this.state.classes.find(c => c.id === this.state.activeClassId);
+            },
+
+            createClass(name, subjects) {
+                const newClass = {
+                    id: 'cls_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                    name: name,
+                    subjects: subjects || [],
+                    students: []
+                };
+                this.state.classes.push(newClass);
+                this.state.activeClassId = newClass.id;
+                this.saveData();
                 this.render();
-            }
-
-            // --- RENDER METHODS ---
+            },
 
             render() {
                 const cls = this.getActiveClass();
                 if (!cls) return;
-                this.renderHeader(cls);
-                this.renderDashboard(cls);
-                this.renderTable(cls);
-                this.renderDropdownList();
-            }
 
-            renderHeader(cls) {
-                this.els.headerName.textContent = cls.name;
-                this.renderSaveStatus(this.state.ui.isDirty ? "Kaydedilmedi" : "Hazır", this.state.ui.isDirty);
-            }
+                // Update header
+                document.getElementById('activeClassName').textContent = cls.name;
 
-            renderSaveStatus(text, isWarning = false) {
-                const el = document.getElementById('lastSavedTime');
-                const time = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                el.textContent = isWarning ? text : `${text} (${time})`;
-                el.className = isWarning ? "text-[10px] text-amber-500 font-bold" : "text-[10px] text-slate-400";
-            }
+                // Update stats
+                document.getElementById('statStudents').textContent = cls.students.length;
+                document.getElementById('statSubjects').textContent = cls.subjects.length;
 
-            renderDashboard(cls) {
-                this.els.statTotal.textContent = cls.students.length;
-                this.els.statSubj.textContent = cls.subjects.length;
-                let tAvg = 0, c = 0, m = 0;
-                cls.students.forEach(s => {
-                    const st = this.calcStats(s, cls.subjects);
-                    if (st.validGrades > 0) { tAvg += st.avg; c++; }
-                    if (st.validGrades < cls.subjects.length) m++;
-                });
-                const avg = c > 0 ? (tAvg / c).toFixed(2) : "0,00";
-                this.els.statAvg.textContent = avg.replace('.', ',');
-                this.els.statStatus.textContent = m === 0 ? "Tamamlandı" : `${m} Eksik`;
-                this.els.statStatus.className = `text-xl font-bold ${m > 0 ? 'text-amber-500' : 'text-emerald-500'}`;
-            }
+                // Render class list
+                const classList = document.getElementById('classList');
+                classList.innerHTML = this.state.classes.map(c => `
+                    <button onclick="app.switchClass('${c.id}')" class="w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex justify-between items-center ${c.id === this.state.activeClassId ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-600 hover:bg-slate-50'}">
+                        <span>${c.name}</span>
+                        <span class="text-[10px] opacity-50 font-normal">${c.students.length} öğr.</span>
+                    </button>
+                `).join('');
 
-            renderTable(cls) {
-                const tr = document.querySelector('thead tr');
-                const anchor = this.els.headerAnchor;
-                document.querySelectorAll('.dynamic-th').forEach(e => e.remove());
+                // Render table
+                this.renderTable();
+            },
 
-                // Safe insertion: recreate header HTML based on current subjects
-                // We preserve static parts
+            renderTable() {
+                const cls = this.getActiveClass();
+                if (!cls) return;
 
-                const headHTML = `
-                    <th class="w-10 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 sticky left-0 z-40">
-                        <input type="checkbox" id="selectAll" onchange="app.toggleSelectAll(this)" class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer">
-                    </th>
-                    <th class="px-4 py-3 border-b border-slate-200 bg-slate-50 sticky-col-header z-40 min-w-[200px] cursor-pointer hover:text-brand-600" onclick="app.sortData('name')">
-                        Öğrenci Adı <i class="fa-solid fa-sort text-xs ml-1 opacity-50"></i>
-                    </th>
-                    ${cls.subjects.map(s => `<th class="px-4 py-3 text-center border-b border-slate-200 bg-slate-50 font-semibold text-slate-600 whitespace-nowrap dynamic-th">${s.name} <span class="block text-[9px] font-normal text-slate-400">(max ${s.max})</span></th>`).join('')}
-                    <th class="w-24 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 cursor-pointer" onclick="app.sortData('total')">Toplam</th>
-                    <th class="w-24 px-4 py-3 text-center border-b border-slate-200 bg-slate-50 cursor-pointer" onclick="app.sortData('average')">Ort.</th>
-                    <th class="w-24 px-4 py-3 border-b border-slate-200 bg-slate-50 text-center">İşlem</th>
-                `;
-                document.querySelector('thead tr').innerHTML = headHTML;
+                const tableHeader = document.getElementById('tableHeader');
+                const tableBody = document.getElementById('tableBody');
+                const emptyState = document.getElementById('emptyState');
 
-                this.renderTableBody(cls);
-            }
-
-            renderTableBody(cls) {
-                this.els.tbody.innerHTML = '';
-                const filter = (this.state.ui.search || '').toLocaleLowerCase('tr-TR').trim();
-                const visible = cls.students.filter(s => s.name.toLocaleLowerCase('tr-TR').includes(filter));
-
-                if (visible.length === 0 && !filter) {
-                    this.els.emptyState.classList.remove('hidden');
+                // Show empty state if no subjects
+                if (cls.subjects.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    document.getElementById('mainTable').classList.add('hidden');
+                    return;
                 } else {
-                    this.els.emptyState.classList.add('hidden');
-                    visible.forEach(s => {
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-slate-50 transition-colors group border-b border-slate-50";
-                        if (this.state.ui.selected.has(s.id)) tr.classList.add('bg-blue-50');
+                    emptyState.classList.add('hidden');
+                    document.getElementById('mainTable').classList.remove('hidden');
+                }
 
-                        const st = this.calcStats(s, cls.subjects);
-                        let cols = `
-                            <td class="w-10 px-4 py-3 text-center sticky-col-cell ${this.state.ui.selected.has(s.id) ? 'bg-blue-50' : ''}"><input type="checkbox" class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 cursor-pointer row-chk" data-id="${s.id}" ${this.state.ui.selected.has(s.id) ? 'checked' : ''}></td>
-                            <td class="px-4 py-3 sticky-col-cell font-medium text-slate-700 whitespace-nowrap min-w-[200px] ${this.state.ui.selected.has(s.id) ? 'bg-blue-50' : ''}">${s.name}</td>
-                        `;
-                        cls.subjects.forEach(sub => {
-                            const v = s.grades[sub.id];
-                            cols += `<td class="px-1 py-1 text-center h-12 p-0"><input type="text" class="cell-input text-sm ${v !== undefined ? 'font-bold text-slate-700' : 'text-slate-300'}" value="${v !== undefined ? v.toString().replace('.', ',') : ''}" placeholder="-" onfocus="this.select()" onchange="app.updateGrade('${s.id}', '${sub.id}', this.value)"></td>`;
-                        });
-                        cols += `
-                            <td class="px-4 py-3 text-center font-bold text-slate-700 bg-slate-50/50">${st.total}</td>
-                            <td class="px-4 py-3 text-center font-bold bg-slate-50/50 ${st.avg < 50 && st.validGrades > 0 ? 'text-red-500' : 'text-emerald-600'}">${st.validGrades > 0 ? st.avg.toFixed(2) : '-'}</td>
-                            <td class="px-4 py-3 text-center flex items-center justify-center gap-2">
-                                <button onclick="app.analyzeStudent(event, '${s.id}')" class="text-ai-400 hover:text-ai-600 p-2"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
-                                <button onclick="app.deleteStudent(event, '${s.id}')" class="text-slate-300 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                // Build header with subject columns
+                const subjectHeaders = cls.subjects.map(s => `
+                    <th class="px-4 py-3 text-center border-b border-slate-200 bg-slate-50 font-semibold text-slate-600 whitespace-nowrap">
+                        ${s.name}
+                        <span class="block text-[9px] font-normal text-slate-400">(max ${s.max})</span>
+                    </th>
+                `).join('');
+
+                // Insert subject headers before "Toplam" column
+                const headerCells = tableHeader.querySelectorAll('th');
+                const totalHeader = headerCells[headerCells.length - 2];
+                totalHeader.insertAdjacentHTML('beforebegin', subjectHeaders);
+
+                // Filter and sort students
+                let students = [...cls.students];
+                if (this.state.searchQuery) {
+                    const q = this.state.searchQuery.toLowerCase();
+                    students = students.filter(s => s.name.toLowerCase().includes(q));
+                }
+
+                students.sort((a, b) => {
+                    const mult = this.state.sortAsc ? 1 : -1;
+                    if (this.state.sortKey === 'name') {
+                        return a.name.localeCompare(b.name, 'tr') * mult;
+                    } else if (this.state.sortKey === 'total') {
+                        const totalA = this.calcTotal(a, cls.subjects);
+                        const totalB = this.calcTotal(b, cls.subjects);
+                        return (totalA - totalB) * mult;
+                    }
+                    return 0;
+                });
+
+                // Render rows
+                tableBody.innerHTML = students.map((student, idx) => {
+                    const total = this.calcTotal(student, cls.subjects);
+                    const isSelected = this.state.selectedIds.has(student.id);
+
+                    const gradeCells = cls.subjects.map(sub => {
+                        const grade = student.grades[sub.id];
+                        return `
+                            <td class="px-1 py-1 text-center h-12 p-0">
+                                <input type="text" 
+                                    class="cell-input text-sm ${grade !== undefined ? 'font-bold text-slate-800' : 'text-slate-300'}" 
+                                    value="${grade !== undefined ? grade.toString().replace('.', ',') : ''}" 
+                                    placeholder="-" 
+                                    onfocus="this.select()" 
+                                    onchange="app.updateGrade('${student.id}', '${sub.id}', this.value)">
                             </td>
                         `;
-                        tr.innerHTML = cols;
-                        tr.querySelector('.row-chk').addEventListener('change', (e) => this.toggleSelection(s.id, e.target.checked));
-                        this.els.tbody.appendChild(tr);
-                    });
-                }
-            }
+                    }).join('');
 
-            renderDropdownList() {
-                const list = document.getElementById('classListContainer');
-                list.innerHTML = '';
-                this.state.classes.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = `p-2 rounded-lg cursor-pointer flex justify-between items-center text-sm ${c.id === this.state.activeClassId ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:bg-slate-50'}`;
-                    div.onclick = () => this.switchClass(c.id);
-                    div.innerHTML = `<span>${c.name}</span> <span class="text-xs opacity-50">${c.students.length} öğr.</span>`;
-                    list.appendChild(div);
+                    return `
+                        <tr class="hover:bg-slate-50/80 transition-colors group ${isSelected ? 'bg-blue-50/50' : ''}">
+                            <td class="w-10 px-4 py-3 text-center sticky left-0 z-20 ${isSelected ? 'bg-blue-50/50' : 'bg-white'}">
+                                <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="app.toggleSelect('${student.id}', this.checked)" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            </td>
+                            <td class="w-10 px-2 py-3 text-center sticky left-10 z-20 text-xs text-slate-400 font-medium ${isSelected ? 'bg-blue-50/50' : 'bg-white'}">${idx + 1}</td>
+                            <td class="px-4 py-3 sticky left-20 z-20 font-medium text-slate-700 whitespace-nowrap min-w-[200px] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] ${isSelected ? 'bg-blue-50/50' : 'bg-white'}">${student.name}</td>
+                            ${gradeCells}
+                            <td class="px-4 py-3 text-center font-bold text-slate-700 bg-slate-50/30">${total.toFixed(2).replace('.', ',')}</td>
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <button onclick="app.analyzeStudent('${student.id}')" class="text-violet-400 hover:text-violet-600 p-2 rounded-lg hover:bg-violet-50 transition-colors" title="Analiz Et">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                                    </button>
+                                    <button onclick="app.deleteStudent('${student.id}')" class="text-slate-300 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors" title="Sil">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            },
+
+            calcTotal(student, subjects) {
+                let total = 0;
+                subjects.forEach(sub => {
+                    const grade = student.grades[sub.id];
+                    if (grade !== undefined) total += grade;
                 });
-            }
+                return total;
+            },
 
-            // --- DATA LOGIC ---
-            loadFromStorage() {
-                const raw = localStorage.getItem('notmatik_v4_db');
-                if (raw) {
-                    const data = JSON.parse(raw);
-                    this.state.classes = data.classes || [];
-                    this.state.activeClassId = data.activeClassId;
-                }
-            }
-            saveToStorage() {
-                const payload = { classes: this.state.classes, activeClassId: this.state.activeClassId, meta: { version: '4.0', ts: Date.now() } };
-                localStorage.setItem('notmatik_v4_db', JSON.stringify(payload));
-                this.state.ui.isDirty = false;
-                this.renderSaveStatus("Kaydedildi");
-                this.els.saveBtn.disabled = true;
-                this.els.saveBtn.classList.remove('bg-brand-600', 'text-white');
-                this.els.saveBtn.classList.add('bg-slate-100', 'text-slate-400');
-            }
-            markDirty() {
-                this.state.ui.isDirty = true;
-                this.els.saveBtn.disabled = false;
-                this.els.saveBtn.classList.add('bg-brand-600', 'text-white');
-                this.els.saveBtn.classList.remove('bg-slate-100', 'text-slate-400');
-                this.renderSaveStatus("Kaydedilmedi", true);
-            }
-            saveData() { this.saveToStorage(); }
-            getActiveClass() { return this.state.classes.find(c => c.id === this.state.activeClassId); }
-
-            createClass(name, isDefault = false, subjects = null) {
-                const newClass = {
-                    id: 'cls_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                    name: name,
-                    subjects: subjects || [], // Default to empty if not provided
-                    students: [],
-                    created: Date.now()
-                };
-                this.state.classes.push(newClass);
-                this.state.activeClassId = newClass.id;
-                this.saveToStorage();
-                if (!isDefault) this.render();
-            }
-            switchClass(id) {
-                this.state.activeClassId = id; this.state.ui.selected.clear(); this.state.ui.search = "";
-                this.saveToStorage(); this.closeAllDropdowns(); this.render();
-            }
-            deleteClass() {
-                if (this.state.classes.length <= 1) return alert("En az bir sınıf kalmalıdır.");
-                if (!confirm("Emin misiniz?")) return;
-                this.state.classes = this.state.classes.filter(c => c.id !== this.state.activeClassId);
-                this.state.activeClassId = this.state.classes[0].id;
-                this.saveToStorage(); this.closeAllDropdowns(); this.render();
-            }
-            addStudent() {
-                const name = prompt("Öğrenci Adı Soyadı:");
-                if (!name?.trim()) return;
-                try {
-                    const cls = this.getActiveClass();
-                    cls.students.push({ id: 'stu_' + Date.now(), name: name.trim(), grades: {} });
-                    cls.students.sort((a, b) => a.name.localeCompare(b.name, 'tr'));
-                    this.markDirty(); this.render();
-                } catch (e) { console.error("Öğrenci eklenemedi:", e); }
-            }
-            updateGrade(studentId, subjectId, valStr) {
+            updateGrade(studentId, subjectId, valueStr) {
                 const cls = this.getActiveClass();
                 const student = cls.students.find(s => s.id === studentId);
                 if (!student) return;
-                const num = this.parseLocaleNumber(valStr);
-                if (valStr.trim() === "") delete student.grades[subjectId];
-                else if (num !== null) {
-                    const sub = cls.subjects.find(s => s.id === subjectId);
-                    student.grades[subjectId] = (num < 0 ? 0 : (num > sub.max ? sub.max : num));
-                }
-                this.markDirty(); this.renderTableBody(cls); this.renderDashboard(cls);
-            }
 
-            // --- UTILS & HELPERS ---
-            calcStats(student, subjects) {
-                let total = 0, validGrades = 0;
-                subjects.forEach(sub => {
-                    const g = student.grades[sub.id];
-                    if (g !== undefined) { total += g; validGrades++; }
+                const val = valueStr.trim().replace(',', '.');
+                if (val === '') {
+                    delete student.grades[subjectId];
+                } else {
+                    const num = parseFloat(val);
+                    if (!isNaN(num)) {
+                        const subject = cls.subjects.find(s => s.id === subjectId);
+                        student.grades[subjectId] = Math.max(0, Math.min(num, subject.max));
+                    }
+                }
+
+                this.saveData();
+                this.renderTable();
+            },
+
+            addStudent() {
+                const name = prompt('Öğrenci Adı Soyadı:');
+                if (!name || !name.trim()) return;
+
+                const cls = this.getActiveClass();
+                cls.students.push({
+                    id: 'stu_' + Date.now(),
+                    name: name.trim(),
+                    grades: {}
                 });
-                return { total, validGrades, avg: validGrades > 0 ? total / validGrades : 0 };
-            }
-            parseLocaleNumber(val) {
-                if (typeof val === 'number') return val;
-                if (!val) return null;
-                const str = String(val).trim().replace(',', '.');
-                const num = parseFloat(str);
-                return isNaN(num) ? null : num;
-            }
-            normalizeHeader(h) { return String(h).toLocaleUpperCase('tr-TR').replace(/[^A-ZÇĞİÖŞÜ0-9]/g, ''); }
 
-            // --- INTERACTIONS ---
-            handleSearch(val) {
-                this.state.ui.search = val;
-                if (this.searchTimeout) clearTimeout(this.searchTimeout);
-                this.searchTimeout = setTimeout(() => this.renderTable(this.getActiveClass()), 250);
-            }
-            toggleDropdown(e, id) { e.stopPropagation(); this.closeAllDropdowns(); document.getElementById(id).classList.remove('hidden'); }
-            closeAllDropdowns() { this.els.dropdowns.forEach(d => document.getElementById(d).classList.add('hidden')); }
-            openModal(id, mode) {
-                document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex');
-                if (id === 'classModal') {
-                    document.getElementById('classModalTitle').textContent = mode === 'create' ? "Yeni Sınıf" : "Düzenle";
-                    document.getElementById('classInputName').value = mode === 'create' ? "" : this.getActiveClass().name;
-                    this.state.ui.modalMode = mode;
-                    this.renderModalSubjects(mode === 'create' ? [] : this.getActiveClass().subjects);
-                }
-            }
-            closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
-            toggleSelection(id, val) { if (val) this.state.ui.selected.add(id); else this.state.ui.selected.delete(id); this.updateBulkBar(); }
-            toggleSelectAll(cb) {
+                this.saveData();
+                this.render();
+            },
+
+            deleteStudent(id) {
+                if (!confirm('Öğrenciyi silmek istediğinize emin misiniz?')) return;
+
                 const cls = this.getActiveClass();
-                if (cb.checked) cls.students.forEach(s => this.state.ui.selected.add(s.id)); else this.state.ui.selected.clear();
-                this.renderTable(cls); this.updateBulkBar();
-            }
-            updateBulkBar() {
-                const c = this.state.ui.selected.size;
-                this.els.selectedCount.textContent = c;
-                if (c > 0) this.els.bulkBar.classList.remove('translate-y-32'); else this.els.bulkBar.classList.add('translate-y-32');
-            }
-            deleteSelected() {
-                if (!confirm("Silinecek?")) return;
-                const cls = this.getActiveClass();
-                const ids = this.state.ui.selected;
-                this.state.trash = { type: 'students', classId: cls.id, data: cls.students.filter(s => ids.has(s.id)) };
-                cls.students = cls.students.filter(s => !ids.has(s.id));
-                this.state.ui.selected.clear();
-                this.updateBulkBar(); this.markDirty(); this.render(); this.showToast();
-            }
-            deleteStudent(e, id) {
-                e.stopPropagation();
-                const cls = this.getActiveClass();
-                this.state.trash = { type: 'students', classId: cls.id, data: cls.students.filter(s => s.id === id) };
                 cls.students = cls.students.filter(s => s.id !== id);
-                this.markDirty(); this.render(); this.showToast();
-            }
-            showToast(msg = "Bitti") {
-                this.els.undoToast.classList.remove('translate-y-40'); setTimeout(() => this.els.undoToast.classList.add('translate-y-40'), 4000);
-            }
-            undoLastAction() {
-                if (!this.state.trash) return;
-                const cls = this.state.classes.find(c => c.id === this.state.trash.classId);
-                cls.students.push(...this.state.trash.data);
-                cls.students.sort((a, b) => a.name.localeCompare(b.name, 'tr'));
-                this.state.trash = null;
-                this.render(); this.markDirty();
-                this.els.undoToast.classList.add('translate-y-40');
-            }
-            clearSelection() { this.state.ui.selected.clear(); this.render(); this.updateBulkBar(); }
-            exportSelected() { alert("Excel İndir'i kullanın."); }
-            sortData(key) {
+
+                this.saveData();
+                this.render();
+            },
+
+            toggleSelect(id, checked) {
+                if (checked) {
+                    this.state.selectedIds.add(id);
+                } else {
+                    this.state.selectedIds.delete(id);
+                }
+                this.renderTable();
+            },
+
+            toggleSelectAll(checkbox) {
                 const cls = this.getActiveClass();
-                this.state.ui.sortAsc = !this.state.ui.sortAsc;
-                const m = this.state.ui.sortAsc ? 1 : -1;
-                cls.students.sort((a, b) => {
-                    if (key === 'name') return a.name.localeCompare(b.name, 'tr') * m;
-                    const sa = this.calcStats(a, cls.subjects);
-                    const sb = this.calcStats(b, cls.subjects);
-                    const va = key === 'total' ? sa.total : sa.avg;
-                    const vb = key === 'total' ? sb.total : sb.avg;
-                    return (va - vb) * m;
-                });
-                this.renderTable(cls);
-            }
+                if (checkbox.checked) {
+                    cls.students.forEach(s => this.state.selectedIds.add(s.id));
+                } else {
+                    this.state.selectedIds.clear();
+                }
+                this.renderTable();
+            },
 
-            // --- FIXED: DOM Creation instead of innerHTML ---
-            addClassSubjectRow() {
-                const container = document.getElementById('classSubjectsList');
+            handleSearch(query) {
+                this.state.searchQuery = query;
+                this.renderTable();
+            },
+
+            sortBy(key) {
+                if (this.state.sortKey === key) {
+                    this.state.sortAsc = !this.state.sortAsc;
+                } else {
+                    this.state.sortKey = key;
+                    this.state.sortAsc = true;
+                }
+                this.renderTable();
+            },
+
+            toggleClassMenu() {
+                const menu = document.getElementById('classMenu');
+                menu.classList.toggle('hidden');
+            },
+
+            toggleSettingsMenu() {
+                const menu = document.getElementById('settingsMenu');
+                menu.classList.toggle('hidden');
+            },
+
+            switchClass(id) {
+                this.state.activeClassId = id;
+                this.state.selectedIds.clear();
+                this.state.searchQuery = '';
+                document.getElementById('searchInput').value = '';
+                document.getElementById('classMenu').classList.add('hidden');
+                this.saveData();
+                this.render();
+            },
+
+            openModal(modalId, mode) {
+                this.state.modalMode = mode;
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('hidden');
+
+                if (modalId === 'classModal') {
+                    const cls = this.getActiveClass();
+                    document.getElementById('classModalTitle').textContent = mode === 'create' ? 'Yeni Sınıf' : 'Sınıf Düzenle';
+                    document.getElementById('classNameInput').value = mode === 'create' ? '' : cls.name;
+
+                    const subjectsList = document.getElementById('subjectsList');
+                    subjectsList.innerHTML = '';
+
+                    if (mode === 'edit' && cls.subjects.length > 0) {
+                        cls.subjects.forEach(sub => {
+                            this.addSubjectRow(sub.name, sub.max);
+                        });
+                    }
+                }
+
+                document.getElementById('classMenu').classList.add('hidden');
+                document.getElementById('settingsMenu').classList.add('hidden');
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+            },
+
+            addSubjectRow(name = '', max = 100) {
+                const subjectsList = document.getElementById('subjectsList');
                 const div = document.createElement('div');
-                div.className = "flex gap-2 items-center mb-2";
+                div.className = 'flex gap-2 items-center mb-2';
                 div.innerHTML = `
-                    <input type="text" placeholder="Ders Adı" class="sub-name flex-1 px-2 py-1 border border-slate-300 rounded text-xs">
-                    <input type="number" value="100" class="sub-max w-14 px-2 py-1 border border-slate-300 rounded text-xs text-center">
-                    <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-xmark"></i></button>
+                    <input type="text" value="${name}" placeholder="Ders Adı" class="sub-name flex-1 px-2 py-1 border border-slate-300 rounded text-xs">
+                    <input type="number" value="${max}" class="sub-max w-14 px-2 py-1 border border-slate-300 rounded text-xs text-center">
+                    <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 `;
-                container.appendChild(div);
-            }
+                subjectsList.appendChild(div);
+            },
 
-            saveClassModal() {
-                const name = document.getElementById('classInputName').value.trim();
-                if (!name) return alert("Sınıf adı giriniz.");
-                const subjDivs = document.querySelectorAll('#classSubjectsList > div');
+            saveClass() {
+                const name = document.getElementById('classNameInput').value.trim();
+                if (!name) return alert('Sınıf adı giriniz.');
+
+                const subjectDivs = document.querySelectorAll('#subjectsList > div');
                 const subjects = [];
-                subjDivs.forEach(div => {
+                subjectDivs.forEach(div => {
                     const sName = div.querySelector('.sub-name').value.trim();
                     const sMax = parseInt(div.querySelector('.sub-max').value) || 100;
                     if (sName) {
-                        subjects.push({ id: sName.toLowerCase().substring(0, 3) + Math.floor(Math.random() * 1000), name: sName.toUpperCase('tr-TR'), max: sMax });
+                        subjects.push({
+                            id: sName.toLowerCase().substring(0, 3) + Math.floor(Math.random() * 1000),
+                            name: sName.toUpperCase(),
+                            max: sMax
+                        });
                     }
                 });
-                if (subjects.length === 0) return alert("En az bir ders eklemelisiniz.");
-                if (this.state.ui.modalMode === 'create') {
-                    this.createClass(name, false, subjects);
+
+                if (subjects.length === 0) return alert('En az bir ders eklemelisiniz.');
+
+                if (this.state.modalMode === 'create') {
+                    this.createClass(name, subjects);
                 } else {
                     const cls = this.getActiveClass();
                     cls.name = name;
                     cls.subjects = subjects;
-                    this.saveToStorage();
+                    this.saveData();
                     this.render();
                 }
-                this.closeModal('classModal');
-            }
-            renderModalSubjects(existingSubjects) {
-                const container = document.getElementById('classSubjectsList');
-                container.innerHTML = '';
-                // Default empty list for new class
-                let list = existingSubjects && existingSubjects.length > 0 ? existingSubjects : [];
-                list.forEach((sub) => {
-                    const div = document.createElement('div');
-                    div.className = "flex gap-2 items-center mb-2";
-                    div.innerHTML = `
-                        <input type="text" value="${sub.name}" class="sub-name flex-1 px-2 py-1 border border-slate-300 rounded text-xs">
-                        <input type="number" value="${sub.max}" class="sub-max w-14 px-2 py-1 border border-slate-300 rounded text-xs text-center">
-                        <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-xmark"></i></button>
-                    `;
-                    container.appendChild(div);
-                });
-            }
-        }
 
-        const app = new NotmatikApp();
+                this.closeModal('classModal');
+            },
+
+            confirmDeleteClass() {
+                if (this.state.classes.length <= 1) return alert('En az bir sınıf kalmalıdır.');
+                if (!confirm('Sınıfı silmek istediğinize emin misiniz?')) return;
+
+                this.state.classes = this.state.classes.filter(c => c.id !== this.state.activeClassId);
+                this.state.activeClassId = this.state.classes[0].id;
+                this.saveData();
+                this.render();
+                document.getElementById('settingsMenu').classList.add('hidden');
+            },
+
+            analyzeClass() {
+                alert('Sınıf analizi özelliği yakında eklenecek!');
+            },
+
+            analyzeStudent(id) {
+                alert('Öğrenci analizi özelliği yakında eklenecek!');
+            },
+
+            importExcel() {
+                alert('Excel içe aktarma özelliği yakında eklenecek!');
+            },
+
+            exportExcel() {
+                const cls = this.getActiveClass();
+                if (!cls || cls.students.length === 0) return alert('Dışa aktarılacak veri yok.');
+
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+
+                // Prepare data
+                const headers = ['Öğrenci Adı', ...cls.subjects.map(s => s.name), 'Toplam'];
+                const rows = cls.students.map(student => {
+                    const grades = cls.subjects.map(sub => student.grades[sub.id] ?? '');
+                    const total = this.calcTotal(student, cls.subjects);
+                    return [student.name, ...grades, total];
+                });
+
+                const wsData = [headers, ...rows];
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                XLSX.utils.book_append_sheet(wb, ws, cls.name);
+
+                // Download
+                XLSX.writeFile(wb, `${cls.name}_notlar.xlsx`);
+            }
+        };
+
+        // Initialize app
+        app.init();
     </script>
 </body>
 
