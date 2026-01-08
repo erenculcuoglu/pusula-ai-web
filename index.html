@@ -305,13 +305,33 @@
         <!-- Table Section -->
         <div class="px-6 pb-2 flex items-center justify-between flex-none">
             <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Öğrenci Listesi</h2>
-            <button onclick="app.addStudent()"
-                class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-sm font-medium transition-colors shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Öğrenci Ekle
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="app.importExcel()"
+                    class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                        </path>
+                    </svg>
+                    Excel Yükle
+                </button>
+                <button onclick="app.openModal('classModal', 'edit')"
+                    class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                    Ders Ekle
+                </button>
+                <button onclick="app.addStudent()"
+                    class="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-bold transition-colors shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Öğrenci Ekle
+                </button>
+            </div>
         </div>
 
         <!-- Table Container -->
@@ -393,7 +413,7 @@
         class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="p-5 border-b border-slate-100 bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-800" id="classModalTitle">Sınıf Düzenle</h3>
+                <h3 class="font-bold text-lg text-slate-800" id="classModalTitle">Dersleri Yönet</h3>
             </div>
             <div class="p-6 space-y-4">
                 <div>
