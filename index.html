@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Notmatik Pro - Öğretmen Asistanı</title>
+    <title>Pusula AI - Öğretmen Asistanı</title>
 
     <meta name="description" content="Öğretmenler için profesyonel not takip sistemi.">
     <meta name="theme-color" content="#2563eb">
@@ -104,11 +104,28 @@
         .text-gradient-ai {
             background: linear-gradient(to right, #7c3aed, #db2777);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .shadow-premium-blue {
             box-shadow: 0 10px 40px -10px rgba(37, 99, 235, 0.4);
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
 </head>
@@ -119,10 +136,21 @@
     <header class="bg-white border-b border-slate-200 h-16 flex-none z-30 shadow-sm relative">
         <div class="h-full px-4 sm:px-6 flex items-center justify-between">
             <div class="flex items-center gap-3 relative">
+                <!-- Pusula AI Logo: Compass SVG with AI Sparkle -->
                 <div
-                    class="w-9 h-9 bg-brand-600 rounded-full flex items-center justify-center text-white shadow-sm flex-shrink-0">
-                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-full flex items-center justify-center text-white shadow-sm flex-shrink-0 relative">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" />
+                        <path d="M16.24 7.76L14.12 14.12L7.76 16.24L9.88 9.88L16.24 7.76Z" fill="white"
+                            fill-opacity="0.9" />
+                    </svg>
+                    <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-yellow-300 rounded-full animate-pulse-glow">
+                    </div>
                 </div>
+                <div class="hidden lg:block">
+                    <h1 class="text-base font-black text-slate-800 tracking-tight">Pusula AI</h1>
+                </div>
+                <div class="h-8 w-px bg-slate-100 mx-1 hidden lg:block"></div>
                 <!-- Class Dropdown -->
                 <button id="classDropdownTrigger" data-dropdown-trigger="classDropdown"
                     onclick="app.toggleDropdown(event, 'classDropdown')"
@@ -164,9 +192,9 @@
                     <span class="text-[10px] text-slate-400" id="lastSavedTime">Otomatik Kayıt</span>
                 </div>
                 <button onclick="app.analyzeClass(event)"
-                    class="hidden sm:flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 border border-purple-100 hover:bg-purple-100 rounded-lg text-sm font-bold transition-all shadow-sm group">
+                    class="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-violet-50 to-fuchsia-50 text-violet-700 border border-violet-100 hover:from-violet-100 hover:to-fuchsia-100 rounded-lg text-sm font-bold transition-all shadow-sm group">
                     <i class="fa-solid fa-wand-magic-sparkles group-hover:animate-pulse"></i>
-                    <span class="hidden lg:inline">Sınıf Analizi</span>
+                    <span class="hidden lg:inline text-gradient-ai">Analiz</span>
                 </button>
                 <button onclick="app.saveData()" id="saveBtn"
                     class="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-400 rounded-lg text-sm font-bold transition-all disabled:cursor-not-allowed"
@@ -275,16 +303,18 @@
                 class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white z-10 p-6">
                 <div
                     class="w-20 h-20 bg-slate-50/50 rounded-full flex items-center justify-center mb-6 text-slate-300 ring-8 ring-slate-50/20">
-                    <i class="fa-regular fa-file-excel text-[32px]"></i>
+                    <i class="fa-regular fa-file-lines text-4xl" style="stroke-width: 1.5;"></i>
                 </div>
-                <h3 class="text-[22px] font-bold text-slate-800 text-center max-w-sm px-6 mb-3 tracking-tight">Başlamak
-                    için öncelikle ders ekleyiniz.</h3>
-                <p class="text-slate-400 text-base text-center max-w-xs mb-10 leading-relaxed">Öğrenci eklemeden önce
-                    not girişi yapacağınız dersleri tanımlamanız gerekir.</p>
+                <h3 class="text-[22px] font-bold text-slate-800 text-center max-w-sm px-6 mb-3 tracking-tight">
+                    Başlamak için öncelikle ders ekleyiniz.
+                </h3>
+                <p class="text-slate-400 text-base text-center max-w-xs mb-10 leading-relaxed">
+                    Öğrenci eklemeden önce not girişi yapacağınız dersleri tanımlamanız gerekir.
+                </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <button onclick="app.openModal('classModal', 'create')"
                         class="px-8 py-4 bg-[#2563EB] text-white rounded-2xl text-base font-bold hover:bg-blue-700 shadow-premium-blue flex items-center gap-3 transition-all hover:scale-[1.02] active:scale-95">
-                        <i class="fa-solid fa-book-bookmark text-xl"></i> Ders Ekle
+                        <i class="fa-solid fa-book text-xl"></i> Ders Ekle
                     </button>
                 </div>
             </div>
