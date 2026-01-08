@@ -1,3 +1,1 @@
-*
-!index.html
-!.gitignore
+# Only ignore git directory internals
